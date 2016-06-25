@@ -37,7 +37,6 @@ trainingData <- trainingData[, classe := factor(trainingData[, classe])]
 
 http://www.danielemaasit.com/MachineLearning/predictionAssignment.html  
 http://fss14142.github.io/CourseraMachineLearningProject/project.html  
-http://flyingdisc.github.io/practical-machine-learning/
 https://github.com/Xiaodan/Coursera-PML-Quantified-Self-Project/blob/gh-pages/report.Rmd
 https://rpubs.com/mjtardelli/PracticalMachineLearning
 https://rpubs.com/DIM302/PracticalMachineLearning

@@ -7,6 +7,30 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(data.table)
+```
+
+## Get the data
+```{r}
+trainingData <- read.csv("pml-training.csv")
+testingData <- read.csv("pml-testing.csv")
+```
+
+## Examine the data
+```{r}
+head(trainingData)
+```
+
+## Find missing and predictor variables
+```{r}
+isMissing <- sapply(testingData, function (x) any(is.na(x) | x == ""))
+isPredictor <- !isMissing & grepl("belt|[^(fore)]arm|dumbbell|forearm", names(isMissing))
+predictors <- names(isMissing)[isPredictor]
+
+# subset to predictors and classe
+vars <- c("classe", predictors)
+data <- trainingData[, vars]
+trainingData <- trainingData[, classe := factor(trainingData[, classe])]
 ```
 
 ## References

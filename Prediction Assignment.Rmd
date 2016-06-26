@@ -43,38 +43,32 @@ dim(trainingData)
 dim(testingData)
 ```
 
-#### Create two partitions of the training set, one for training, the other for processing
-#### Leave the testing set untouched for the quiz results
-```{r}
-training <- createDataPartition(trainingData$classe, p = 0.7, list = FALSE)
-trainingSet <- trainingData[training, ]
-testingSet <- trainingData[-training, ]
-dim(trainingSet)
-dim(testingSet)
-```
-
 #### Remove nearZeroVar predictors, predictors that have one unique value or few unique values relative to the number of samples and the ratio of the frequency of the most common value to the frequency of teh second most common value is large
 ```{r}
-nzvTraining <- nearZeroVar(trainingSet)
-trainingSet <- trainingSet[, -nzvTraining]
-testingSet <- testingSet[, -nzvTraining]
+nzvTraining <- nearZeroVar(trainingData)
+trainingSet <- trainingData[, -nzvTraining]
 dim(trainingSet)
-dim(testingSet)
 ```
 
 #### Remove variables that are mostly NA
 ```{r}
 naSet <- sapply(trainingSet, function(x) mean(is.na(x))) > 0.95
 trainingSet <- trainingSet[, naSet == FALSE]
-testingSet <- testingSet[, naSet == FALSE]
 dim(trainingSet)
-dim(testingSet)
 ```
 
 #### Remove the first six identifying variables
 ```{r}
 trainingSet <- trainingSet[, -(1:6)]
-testingSet <- testingSet[, -(1:6)]
+dim(trainingSet)
+```
+
+#### Create two partitions of the training set, one for training, the other for processing
+#### Leave the testing set untouched for the quiz results
+```{r}
+training <- createDataPartition(trainingSet$classe, p = 0.7, list = FALSE)
+trainingSet <- trainingSet[training, ]
+testingSet <- trainingSet[-training, ]
 dim(trainingSet)
 dim(testingSet)
 ```
@@ -83,7 +77,7 @@ dim(testingSet)
 
 #### Training the predictor
 ```{r}
-set.seed(20160626)
+set.seed(12345)
 controlRF <- trainControl(method = "cv", 
                                     number = 3, 
                                     verboseIter = TRUE)
@@ -101,8 +95,6 @@ predictRF <- predict(modFitRF, newdata = testingSet)
 confMatRF <- confusionMatrix(predictRF, testingSet$classe)
 confMatRF
 ```
-
-Have 0.9999 accuracy with this model.  Success!
 
 ## APPLY TO TESTING DATA
 
